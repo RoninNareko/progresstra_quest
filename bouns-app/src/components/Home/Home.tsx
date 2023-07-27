@@ -9,18 +9,33 @@ import fetchAccessToken from "../../helpers/fetchAccessToken";
 import fetchBonusses from "../../helpers/fetchBonusses";
 import { BonusInfoType } from "../BonusCard/BonusCard.types";
 
+const getAccessToken = async () => {
+  return await fetchAccessToken();
+};
+
+const getBonusses = async (accessToken: string) => {
+  return await fetchBonusses(accessToken);
+};
+
 const Home = () => {
   const cx = classNames.bind(styles);
-  const [data, setData] = useState<BonusInfoType>();
+  const [data, setData] = useState<BonusInfoType | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const getBonusses = async () => {
-      const accessToken = await fetchAccessToken();
-      const bonus = await fetchBonusses(accessToken);
-      console.log("bonus", bonus);
-      setData(bonus);
+    const fetchData = async () => {
+      try {
+        const accessToken = await getAccessToken();
+        const bonus = await getBonusses(accessToken);
+        setData(bonus);
+      } catch (error) {
+        // @ts-ignore
+        console.error("Error fetching data:", error.message);
+      } finally {
+        setLoading(false);
+      }
     };
-    getBonusses();
+    fetchData();
   }, []);
 
   return (
@@ -43,7 +58,13 @@ const Home = () => {
           <div>
             <img src={information_btn} alt="btn" />
           </div>
-          <section>{data && <BonusCard data={data} />}</section>
+          <section>
+            {loading ? (
+              <p className={cx(styles.loadingText)}>Загрузка...</p>
+            ) : (
+              data && <BonusCard data={data} />
+            )}
+          </section>
         </section>
       </section>
     </section>
