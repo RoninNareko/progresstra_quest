@@ -4,9 +4,25 @@ import dots from "./../../assets/images/dots.png";
 import charger from "./../../assets/images/charger.png";
 import information_btn from "./../../assets/images/information-button 1.png";
 import BonusCard from "../BonusCard/BonusCard";
+import { useEffect, useState } from "react";
+import fetchAccessToken from "../../helpers/fetchAccessToken";
+import fetchBonusses from "../../helpers/fetchBonusses";
+import { BonusInfoType } from "../BonusCard/BonusCard.types";
 
-export default function Home() {
+const Home = () => {
   const cx = classNames.bind(styles);
+  const [data, setData] = useState<BonusInfoType>();
+
+  useEffect(() => {
+    const getBonusses = async () => {
+      const accessToken = await fetchAccessToken();
+      const bonus = await fetchBonusses(accessToken);
+      console.log("bonus", bonus);
+      setData(bonus);
+    };
+    getBonusses();
+  }, []);
+
   return (
     <section className={cx(styles.home)}>
       <section className={cx(styles.container)}>
@@ -27,11 +43,11 @@ export default function Home() {
           <div>
             <img src={information_btn} alt="btn" />
           </div>
-          <section>
-            <BonusCard />
-          </section>
+          <section>{data && <BonusCard data={data} />}</section>
         </section>
       </section>
     </section>
   );
-}
+};
+
+export default Home;
