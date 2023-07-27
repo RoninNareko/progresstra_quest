@@ -1,0 +1,31 @@
+.cardCnt {
+  box-shadow: 2px 2px 16px 0px rgba(0, 0, 0, 0.2);
+  width: 335px;
+  height: 105px;
+  background: #ffffff;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  border-radius: 18px;
+  align-items: center;
+  text-align: left;
+  h2 {
+    font-size: 24px;
+    font-weight: 700;
+  }
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 40px;
+    margin-top: 10px;
+  }
+  p {
+    color: #979797;
+    font-weight: 400;
+  }
+  img {
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+}
